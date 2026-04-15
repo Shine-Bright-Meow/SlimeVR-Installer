@@ -12,8 +12,8 @@
         pkgs = import nixpkgs { inherit system; };
       in
       {
-        packages.default = pkgs.stdenv.mkDerivation {
-          pname = "slimevr-installer";
+        packages.web = pkgs.stdenv.mkDerivation {
+          pname = "slimevr-installer-web";
           version = "1.0.0";
           src = ./.;
 
@@ -28,6 +28,25 @@
             cp windows/web/slimevr_web_installer.exe $out/
           '';
         };
+
+        packages.offline = pkgs.stdenv.mkDerivation {
+          pname = "slimevr-installer-offline";
+          version = "1.0.0";
+          src = ./.;
+
+          nativeBuildInputs = [ pkgs.nsis ];
+
+          buildPhase = ''
+            makensis windows/offline/slimevr_offline_installer.nsi
+          '';
+
+          installPhase = ''
+            mkdir -p $out
+            cp windows/offline/slimevr_offline_installer.exe $out/
+          '';
+        };
+
+        packages.default = self.packages.${system}.web;
 
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [ 
