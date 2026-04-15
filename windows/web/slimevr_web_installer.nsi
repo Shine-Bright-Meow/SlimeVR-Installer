@@ -77,7 +77,7 @@ SpaceTexts none # Don't show required disk space since we don't know for sure
 SetOverwrite on
 SetCompressor lzma  # Use LZMA Compression algorithm, compression quality is better.
 
-OutFile "slimevr_installer.exe"
+OutFile "slimevr_web_installer.exe"
 
 # Define installation directory
 InstallDir "$PROGRAMFILES\SlimeVR Server" ; $InstDir default value. Defaults to user's local appdata to avoid asking admin rights
