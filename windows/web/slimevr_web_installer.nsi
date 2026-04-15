@@ -40,10 +40,10 @@ Unicode True
 !define MVCDLFileZip "vc_redist.x64.exe"
 
 # Define the Java Version Strings and to Check (JRE\release -> JAVA_RUNTIME_VERSION=)
-!define JREVersion "17.0.17+10"
+!define JREVersion "PLACEHOLDER_VERSION"
 !define JREURLType "local" ; "url" or "local"
-!define JREDLURL "assets\\OpenJDK17U-jre_x64_windows_hotspot_17.0.17_10.zip"
-!define JREDLFileZip "OpenJDK17U-jre_x64_windows_hotspot_17.0.17_10.zip"
+!define JREDLURL "assets\\jre.zip"
+!define JREDLFileZip "jre.zip"
 
 !define SVRServerVersion "latest"
 !define SVRServerURLType "local" ; "url" or "local"
