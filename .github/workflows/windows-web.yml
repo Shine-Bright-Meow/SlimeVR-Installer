@@ -60,7 +60,7 @@ jobs:
           $SERVER_VERSION = "${{ env.SERVER_VERSION }}"
           $content = Get-Content -Path "${{ env.WINDOWS_WEB_DIR }}/slimevr_web_installer.nsi" -Raw
           $content = $content -replace '!define JREVersion "PLACEHOLDER_VERSION"', "!define JREVersion `"${JRE_VERSION}`""
-          $content = $content -replace 'OutFile "slimevr_${SERVER_VERSION}_offline_installer\.exe"', "OutFile `"${OUTFILE_NAME}`""
+          $content = $content -replace 'OutFile "OUTFILE_NAME""', "OutFile `"slimevr_${SERVER_VERSION}_offline_installer.exe`""
           Set-Content -Path "${{ env.WINDOWS_WEB_DIR }}/slimevr_web_installer.nsi" -Value $content -NoNewline
 
       - name: Create NSIS installer
