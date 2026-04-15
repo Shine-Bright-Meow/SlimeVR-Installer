@@ -14,10 +14,10 @@
 !include LogicLib.nsh	; For conditional operators
 !include nsDialogs.nsh  ; For custom pages
 !include FileFunc.nsh   ; For GetTime function
-!include ..\plugins\NsProcess\NsProcess.nsh ; For Check on SteamVR
+!include nsProcess.nsh ; For Check on SteamVR
 !include TextFunc.nsh   ; For ConfigRead
 !include MUI2.nsh
-!include ..\steamdetect.nsh
+!include steamdetect.nsh
 !include dlmacro.nsh
 
 !define CSIDL_COMMON_DOCUMENTS 0x002E ; Define CSIDL_COMMON_DOCUMENTS if not already defined
