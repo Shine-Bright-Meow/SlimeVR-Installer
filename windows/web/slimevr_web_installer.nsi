@@ -71,7 +71,7 @@ Var /GLOBAL SlimeVRLabelID
 Var /GLOBAL SlimeVRLabelTxt
 
 # Define name of installer
-Name "SlimeVR (Offline)"
+Name "SlimeVR"
 
 SpaceTexts none # Don't show required disk space since we don't know for sure
 SetOverwrite on
@@ -85,7 +85,7 @@ InstallDir "$PROGRAMFILES\SlimeVR Server" ; $InstDir default value. Defaults to 
 ShowInstDetails show
 ShowUninstDetails show
 
-BrandingText "SlimeVR Offline Installer 1.0.0"
+BrandingText "SlimeVR Installer 4.0.0"
 
 # Admin rights are required for:
 # 1. Removing Start Menu shortcut in Windows 7+
@@ -778,8 +778,8 @@ Section "-un." un.SEC_POST_UNINSTALL
     DetailPrint "Done."
 SectionEnd
 
-LangString DESC_SEC_SERVER ${LANG_ENGLISH} "Installs bundled SlimeVR Server."
-LangString DESC_SEC_JRE ${LANG_ENGLISH} "Copies bundled Java JRE 17 to installation folder. Required for SlimeVR Server."
+LangString DESC_SEC_SERVER ${LANG_ENGLISH} "Installs latest SlimeVR Server."
+LangString DESC_SEC_JRE ${LANG_ENGLISH} "Downloads and copies Java JRE 17 to installation folder. Required for SlimeVR Server."
 LangString DESC_SEC_VRDRIVER ${LANG_ENGLISH} "Installs latest SteamVR Driver for SlimeVR."
 LangString DESC_SEC_USBDRIVERS ${LANG_ENGLISH} "A list of USB drivers that are used by various boards."
 LangString DESC_SEC_FEEDER_APP ${LANG_ENGLISH} "Installs SlimeVR Feeder App that sends position of SteamVR trackers (Vive trackers, controllers) to SlimeVR Server. Required for elbow tracking."

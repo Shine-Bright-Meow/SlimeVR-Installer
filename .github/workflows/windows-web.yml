@@ -1,6 +1,6 @@
 # Workflow based on https://github.com/joncloud/makensis-action-test/blob/publish/.github/workflows/main.yml
 
-name: SlimeVR Windows Installer (Offline Web Mode)
+name: SlimeVR Windows Web Installer
 
 on: [ push, pull_request, workflow_dispatch ]
 
@@ -34,6 +34,7 @@ jobs:
     runs-on: windows-2022
 
     env:
+      # The directory of the web installer project
       WINDOWS_WEB_DIR: ${{ github.workspace }}/windows/web
 
     steps:
