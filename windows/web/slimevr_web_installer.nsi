@@ -35,29 +35,29 @@ Unicode True
 
 # Define all download URLs and versions here for easy editing
 !define MVCVersion ""
-!define MVCURLType "url" ; "url" or "local"
-!define MVCDLURL "https://aka.ms/vc14/vc_redist.x64.exe"
+!define MVCURLType "local" ; "url" or "local"
+!define MVCDLURL "assets\\vc_redist.x64.exe"
 !define MVCDLFileZip "vc_redist.x64.exe"
 
-# Define the Java Version Strings and to Check (JRE\relase -> JAVA_RUNTIME_VERSION=)
+# Define the Java Version Strings and to Check (JRE\release -> JAVA_RUNTIME_VERSION=)
 !define JREVersion "17.0.17+10"
-!define JREURLType "url" ; "url" or "local"
-!define JREDLURL "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.17%2B10/OpenJDK17U-jre_x64_windows_hotspot_17.0.17_10.zip"
+!define JREURLType "local" ; "url" or "local"
+!define JREDLURL "assets\\OpenJDK17U-jre_x64_windows_hotspot_17.0.17_10.zip"
 !define JREDLFileZip "OpenJDK17U-jre_x64_windows_hotspot_17.0.17_10.zip"
 
 !define SVRServerVersion "latest"
-!define SVRServerURLType "url" ; "url" or "local"
-!define SVRServerDLURL "https://github.com/SlimeVR/SlimeVR-Server/releases/latest/download/SlimeVR-win64.zip"
+!define SVRServerURLType "local" ; "url" or "local"
+!define SVRServerDLURL "assets\\SlimeVR-Server-latest.zip"
 !define SVRServerDLFileZip "SlimeVR-Server-latest.zip"
 
 !define SVRDriverVersion "latest"
-!define SVRDriverURLType "url" ; "url" or "local"
-!define SVRDriverDLURL "https://github.com/SlimeVR/SlimeVR-OpenVR-Driver/releases/latest/download/slimevr-openvr-driver-win64.zip"
+!define SVRDriverURLType "local" ; "url" or "local"
+!define SVRDriverDLURL "assets\\slimevr-openvr-driver-win64.zip"
 !define SVRDriverDLFileZip "slimevr-openvr-driver-win64.zip"
 
 !define SVRFeederVersion "latest"
-!define SVRFeederURLType "url" ; "url" or "local"
-!define SVRFeederDLURL "https://github.com/SlimeVR/SlimeVR-Feeder-App/releases/latest/download/SlimeVR-Feeder-App-win64.zip"
+!define SVRFeederURLType "local" ; "url" or "local"
+!define SVRFeederDLURL "assets\\SlimeVR-Feeder-App-latest.zip"
 !define SVRFeederDLFileZip "SlimeVR-Feeder-App-latest.zip"
 
 Var JREneedInstall
@@ -71,13 +71,13 @@ Var /GLOBAL SlimeVRLabelID
 Var /GLOBAL SlimeVRLabelTxt
 
 # Define name of installer
-Name "SlimeVR"
+Name "SlimeVR (Offline)"
 
 SpaceTexts none # Don't show required disk space since we don't know for sure
 SetOverwrite on
 SetCompressor lzma  # Use LZMA Compression algorithm, compression quality is better.
 
-OutFile "slimevr_web_installer.exe"
+OutFile "slimevr_installer.exe"
 
 # Define installation directory
 InstallDir "$PROGRAMFILES\SlimeVR Server" ; $InstDir default value. Defaults to user's local appdata to avoid asking admin rights
@@ -85,7 +85,7 @@ InstallDir "$PROGRAMFILES\SlimeVR Server" ; $InstDir default value. Defaults to 
 ShowInstDetails show
 ShowUninstDetails show
 
-BrandingText "SlimeVR Installer 4.0.0"
+BrandingText "SlimeVR Offline Installer 1.0.0"
 
 # Admin rights are required for:
 # 1. Removing Start Menu shortcut in Windows 7+
@@ -778,8 +778,8 @@ Section "-un." un.SEC_POST_UNINSTALL
     DetailPrint "Done."
 SectionEnd
 
-LangString DESC_SEC_SERVER ${LANG_ENGLISH} "Installs latest SlimeVR Server."
-LangString DESC_SEC_JRE ${LANG_ENGLISH} "Downloads and copies Java JRE 17 to installation folder. Required for SlimeVR Server."
+LangString DESC_SEC_SERVER ${LANG_ENGLISH} "Installs bundled SlimeVR Server."
+LangString DESC_SEC_JRE ${LANG_ENGLISH} "Copies bundled Java JRE 17 to installation folder. Required for SlimeVR Server."
 LangString DESC_SEC_VRDRIVER ${LANG_ENGLISH} "Installs latest SteamVR Driver for SlimeVR."
 LangString DESC_SEC_USBDRIVERS ${LANG_ENGLISH} "A list of USB drivers that are used by various boards."
 LangString DESC_SEC_FEEDER_APP ${LANG_ENGLISH} "Installs SlimeVR Feeder App that sends position of SteamVR trackers (Vive trackers, controllers) to SlimeVR Server. Required for elbow tracking."
