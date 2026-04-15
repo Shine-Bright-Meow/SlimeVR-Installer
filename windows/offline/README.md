@@ -1,27 +1,26 @@
 # SlimeVR Offline Installer
 
-This is an offline version of the SlimeVR installer. All components are bundled, no internet required during installation.
+## Overview
+Offline version bundles all dependencies (Server v19.0.0, Driver v4.0.0, Feeder v0.2.15, JRE 17.0.18+8, VC++ latest, USB drivers). No internet needed at install time.
 
-## Assets Required
-
-Download these files to `windows/offline/assets/`:
-
-1. **VC++ Redist** (latest): https://aka.ms/vc14/vc_redist.x64.exe → `vc_redist.x64.exe`
-2. **Java JRE 17.0.17+10**: https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.17%2B10/OpenJDK17U-jre_x64_windows_hotspot_17.0.17_10.zip → `OpenJDK17U-jre_x64_windows_hotspot_17.0.17_10.zip`
-3. **SlimeVR Server** (latest): https://github.com/SlimeVR/SlimeVR-Server/releases/latest/download/SlimeVR-win64.zip → `SlimeVR-Server-latest.zip`
-4. **OpenVR Driver** (latest): https://github.com/SlimeVR/SlimeVR-OpenVR-Driver/releases/latest/download/slimevr-openvr-driver-win64.zip → `slimevr-openvr-driver-win64.zip`
-5. **Feeder App** (latest): https://github.com/SlimeVR/SlimeVR-Feeder-App/releases/latest/download/SlimeVR-Feeder-App-win64.zip → `SlimeVR-Feeder-App-latest.zip`
-
-## Build
-
-Update flake.nix to support offline:
-
+## Build (Nix)
 ```
 nix build .#installer-offline
 ```
+(Requires flake.nix update for assets download.)
 
-Installer ~500MB.
+## Manual build (NSIS)
+1. Download assets to `windows/offline/assets/`:
+   - VC++: https://aka.ms/vs/17/release/vc_redist.x64.exe → vc_redist.x64.exe
+   - JRE: https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.18%2B8/OpenJDK17U-jre_x64_windows_hotspot_17.0.18_8.zip
+   - Server: https://github.com/SlimeVR/SlimeVR-Server/releases/download/v19.0.0/SlimeVR-win64.zip → SlimeVR-win64.zip
+   - Driver: https://github.com/SlimeVR/SlimeVR-OpenVR-Driver/releases/download/v4.0.0/slimevr-openvr-driver-win64.zip
+   - Feeder: https://github.com/SlimeVR/SlimeVR-Feeder-App/releases/download/v0.2.15/SlimeVR-Feeder-App-win64.zip → SlimeVR-Feeder-App-win64.zip
+2. `makensis windows/offline/slimevr_offline_installer.nsi` → slimevr_offline_installer.exe (~500MB)
 
-## Test
+## Differences from Web
+- `*URLType = "local"` → File /oname extracts bundled.
+- No NScurl downloads.
+- Drivers shared from web/.
 
-Run the exe, ensure offline network disabled, verify installs without errors.
+Tested NSIS syntax. Run to verify.
