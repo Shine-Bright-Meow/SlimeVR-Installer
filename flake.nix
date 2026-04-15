@@ -29,23 +29,6 @@
           '';
         };
 
-        packages.offline = pkgs.stdenv.mkDerivation {
-          pname = "slimevr-installer-offline";
-          version = "1.0.0";
-          src = ./.;
-
-          nativeBuildInputs = [ pkgs.nsis ];
-
-          buildPhase = ''
-            makensis windows/offline/slimevr_offline_installer.nsi
-          '';
-
-          installPhase = ''
-            mkdir -p $out
-            cp windows/offline/slimevr_offline_installer.exe $out/
-          '';
-        };
-
         packages.default = self.packages.${system}.web;
 
         devShells.default = pkgs.mkShell {
