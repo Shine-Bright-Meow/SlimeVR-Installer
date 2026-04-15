@@ -22,7 +22,8 @@ jobs:
           # VC++
           Invoke-WebRequest -Uri "https://aka.ms/vc14/vc_redist.x64.exe" -OutFile "$assetsDir/vc_redist.x64.exe"
           # JRE
-          Invoke-WebRequest -Uri "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-${JRE_VERSION}/OpenJDK17U-jre_x64_windows_hotspot_${JRE_VERSION//+/_}.zip" -OutFile "$assetsDir/jre.zip"
+          $versionFixed = $JRE_VERSION -replace '\+', '_'
+          Invoke-WebRequest -Uri "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-$JRE_VERSION/OpenJDK17U-jre_x64_windows_hotspot_$versionFixed.zip" -OutFile "$assetsDir/jre.zip"
           # Server
           Invoke-WebRequest -Uri "https://github.com/SlimeVR/SlimeVR-Server/releases/latest/download/SlimeVR-win64.zip" -OutFile "$assetsDir/SlimeVR-Server-latest.zip"
           # Driver
