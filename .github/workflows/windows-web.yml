@@ -60,7 +60,7 @@ jobs:
           $SERVER_VERSION = "${{ env.SERVER_VERSION }}"
           $content = Get-Content -Path "${{ env.WINDOWS_WEB_DIR }}/slimevr_web_installer.nsi" -Raw
           $content = $content -replace '!define JREVersion "PLACEHOLDER_VERSION"', "!define JREVersion `"${JRE_VERSION}`""
-          $content = $content -replace 'OutFile "slimevr_${$SERVER_VERSION}_offline_installer\.exe"', "OutFile `"${OUTFILE_NAME}`""
+          $content = $content -replace 'OutFile "slimevr_${SERVER_VERSION}_offline_installer\.exe"', "OutFile `"${OUTFILE_NAME}`""
           Set-Content -Path "${{ env.WINDOWS_WEB_DIR }}/slimevr_web_installer.nsi" -Value $content -NoNewline
 
       - name: Create NSIS installer
@@ -74,7 +74,7 @@ jobs:
           # Artifact name
           name: "slimevr_web_installer" # optional, default is artifact
           # A file, directory or wildcard pattern that describes what to upload
-          path: ${{ env.WINDOWS_WEB_DIR }}/slimevr_web_installer.exe
+          path: ${{ env.WINDOWS_WEB_DIR }}/slimevr_${{ env.SERVER_VERSION }}_offline_installer.exe
 
       - name: Upload to draft release
         uses: softprops/action-gh-release@v2
