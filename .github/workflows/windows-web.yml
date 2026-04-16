@@ -5,8 +5,8 @@ name: SlimeVR Windows Web Installer
 on: [ push, pull_request, workflow_dispatch ]
 
 env:
-  DRIVER_VERSION: "latest"
-  FEEDER_VERSION: "latest"
+  DRIVER_VERSION: "v4.0.0"
+  FEEDER_VERSION: "v0.2.15"
   JRE_VERSION: "17.0.11+9"
   SERVER_VERSION: "19.0.0"
 
@@ -42,9 +42,9 @@ jobs:
           # Server
           Invoke-WebRequest -Uri "https://github.com/SlimeVR/SlimeVR-Server/releases/download/$SERVER_VERSION/SlimeVR-win64.zip" -OutFile "$assetsDir/SlimeVR-Server-latest.zip"
           # Driver
-          Invoke-WebRequest -Uri "https://github.com/SlimeVR/SlimeVR-OpenVR-Driver/releases/$DRIVER_VERSION/download/slimevr-openvr-driver-win64.zip" -OutFile "$assetsDir/slimevr-openvr-driver-win64.zip"
+          Invoke-WebRequest -Uri "https://github.com/SlimeVR/SlimeVR-OpenVR-Driver/releases/download/$DRIVER_VERSION/slimevr-openvr-driver-win64.zip" -OutFile "$assetsDir/slimevr-openvr-driver-win64.zip"
           # Feeder
-          Invoke-WebRequest -Uri "https://github.com/SlimeVR/SlimeVR-Feeder-App/releases/$FEEDER_VERSION/download/SlimeVR-Feeder-App-win64.zip" -OutFile "$assetsDir/SlimeVR-Feeder-App-latest.zip"
+          Invoke-WebRequest -Uri "https://github.com/SlimeVR/SlimeVR-Feeder-App/releases/download/$FEEDER_VERSION/SlimeVR-Feeder-App-win64.zip" -OutFile "$assetsDir/SlimeVR-Feeder-App-latest.zip"
       - name: Update NSI defines
         shell: powershell
         run: |
