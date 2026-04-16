@@ -5,38 +5,15 @@ name: SlimeVR Windows Web Installer
 on: [ push, pull_request, workflow_dispatch ]
 
 env:
+  DRIVER_VERSION: "latest"
+  FEEDER_VERSION: "latest"
   JRE_VERSION: "17.0.11+9"
   SERVER_VERSION: "19.0.0"
 
 jobs:
-  download:
-    runs-on: windows-2022
-    steps:
-      - uses: actions/checkout@v6
-      - name: Download assets
-        shell: powershell
-        run: |
-          $JRE_VERSION = "${{ env.JRE_VERSION }}"
-          $assetsDir = "windows/web/assets"
-          New-Item -ItemType Directory -Force -Path $assetsDir
-          # VC++
-          Invoke-WebRequest -Uri "https://aka.ms/vc14/vc_redist.x64.exe" -OutFile "$assetsDir/vc_redist.x64.exe"
-          # JRE
-          $versionFixed = $JRE_VERSION -replace '\+', '_'
-          Invoke-WebRequest -Uri "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-$JRE_VERSION/OpenJDK17U-jre_x64_windows_hotspot_$versionFixed.zip" -OutFile "$assetsDir/jre.zip"
-          # Server
-          Invoke-WebRequest -Uri "https://github.com/SlimeVR/SlimeVR-Server/releases/latest/download/SlimeVR-win64.zip" -OutFile "$assetsDir/SlimeVR-Server-latest.zip"
-          # Driver
-          Invoke-WebRequest -Uri "https://github.com/SlimeVR/SlimeVR-OpenVR-Driver/releases/latest/download/slimevr-openvr-driver-win64.zip" -OutFile "$assetsDir/slimevr-openvr-driver-win64.zip"
-          # Feeder
-          Invoke-WebRequest -Uri "https://github.com/SlimeVR/SlimeVR-Feeder-App/releases/latest/download/SlimeVR-Feeder-App-win64.zip" -OutFile "$assetsDir/SlimeVR-Feeder-App-latest.zip"
-      - uses: actions/upload-artifact@v6
-        with:
-          name: web-assets
-          path: windows/web/assets
+
 
   build:
-    needs: download
     runs-on: windows-2022
 
     env:
@@ -49,10 +26,25 @@ jobs:
         with:
           submodules: recursive
       - name: Download assets
-        uses: actions/download-artifact@v6
-        with:
-          name: web-assets
-          path: ${{ env.WINDOWS_WEB_DIR }}/assets
+        shell: powershell
+        run: |
+          $DRIVER_VERSION = "${{ env.DRIVER_VERSION }}"
+          $FEEDER_VERSION = "${{ env.FEEDER_VERSION }}"
+          $JRE_VERSION = "${{ env.JRE_VERSION }}"
+          $SERVER_VERSION = "v${{ env.SERVER_VERSION }}"
+          $assetsDir = "${{ env.WINDOWS_WEB_DIR }}/assets"
+          New-Item -ItemType Directory -Force -Path $assetsDir
+          # VC++
+          Invoke-WebRequest -Uri "https://aka.ms/vc14/vc_redist.x64.exe" -OutFile "$assetsDir/vc_redist.x64.exe"
+          # JRE
+          $versionFixed = $JRE_VERSION -replace '\+', '_'
+          Invoke-WebRequest -Uri "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-$JRE_VERSION/OpenJDK17U-jre_x64_windows_hotspot_$versionFixed.zip" -OutFile "$assetsDir/jre.zip"
+          # Server
+          Invoke-WebRequest -Uri "https://github.com/SlimeVR/SlimeVR-Server/releases/$SERVER_VERSION/download/SlimeVR-win64.zip" -OutFile "$assetsDir/SlimeVR-Server-latest.zip"
+          # Driver
+          Invoke-WebRequest -Uri "https://github.com/SlimeVR/SlimeVR-OpenVR-Driver/releases/$DRIVER_VERSION/download/slimevr-openvr-driver-win64.zip" -OutFile "$assetsDir/slimevr-openvr-driver-win64.zip"
+          # Feeder
+          Invoke-WebRequest -Uri "https://github.com/SlimeVR/SlimeVR-Feeder-App/releases/$FEEDER_VERSION/download/SlimeVR-Feeder-App-win64.zip" -OutFile "$assetsDir/SlimeVR-Feeder-App-latest.zip"
       - name: Update NSI defines
         shell: powershell
         run: |
@@ -75,11 +67,3 @@ jobs:
           name: "slimevr_web_installer" # optional, default is artifact
           # A file, directory or wildcard pattern that describes what to upload
           path: ${{ env.WINDOWS_WEB_DIR }}/slimevr_${{ env.SERVER_VERSION }}_offline_installer.exe
-
-      - name: Upload to draft release
-        uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          draft: true
-          generate_release_notes: true
-          files: "${{ env.WINDOWS_WEB_DIR }}/slimevr_web_installer.exe"
