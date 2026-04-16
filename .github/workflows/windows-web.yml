@@ -5,10 +5,10 @@ name: SlimeVR Windows Web Installer
 on: [ push, pull_request, workflow_dispatch ]
 
 env:
-  DRIVER_VERSION: "v4.0.0"
-  FEEDER_VERSION: "v0.2.15"
-  JRE_VERSION: "17.0.11+9"
-  SERVER_VERSION: "v19.0.0"
+  DRIVER_VERSION: "v4.0.0" # https://github.com/SlimeVR/SlimeVR-OpenVR-Driver/tags
+  FEEDER_VERSION: "v0.2.15" # https://github.com/SlimeVR/SlimeVR-Feeder-App/tags
+  JRE_VERSION: "17.0.11+9" # https://github.com/adoptium/temurin17-binaries/tags
+  SERVER_VERSION: "v19.0.0" # https://github.com/SlimeVR/SlimeVR-Server/tags
 
 jobs:
 
