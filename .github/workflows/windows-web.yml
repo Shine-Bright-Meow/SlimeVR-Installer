@@ -40,7 +40,7 @@ jobs:
           $versionFixed = $JRE_VERSION -replace '\+', '_'
           Invoke-WebRequest -Uri "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-$JRE_VERSION/OpenJDK17U-jre_x64_windows_hotspot_$versionFixed.zip" -OutFile "$assetsDir/jre.zip"
           # Server
-          Invoke-WebRequest -Uri "https://github.com/SlimeVR/SlimeVR-Server/releases/$SERVER_VERSION/download/SlimeVR-win64.zip" -OutFile "$assetsDir/SlimeVR-Server-latest.zip"
+          Invoke-WebRequest -Uri "https://github.com/SlimeVR/SlimeVR-Server/releases/download/$SERVER_VERSION/SlimeVR-win64.zip" -OutFile "$assetsDir/SlimeVR-Server-latest.zip"
           # Driver
           Invoke-WebRequest -Uri "https://github.com/SlimeVR/SlimeVR-OpenVR-Driver/releases/$DRIVER_VERSION/download/slimevr-openvr-driver-win64.zip" -OutFile "$assetsDir/slimevr-openvr-driver-win64.zip"
           # Feeder
