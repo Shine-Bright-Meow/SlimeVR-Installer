@@ -45,20 +45,20 @@ Unicode True
 !define JREDLURL "assets\\jre.zip"
 !define JREDLFileZip "jre.zip"
 
-!define SVRServerVersion "latest"
+!define SVRServerVersion "PLACEHOLDER_VERSION"
 !define SVRServerURLType "local" ; "url" or "local"
-!define SVRServerDLURL "assets\\SlimeVR-Server-latest.zip"
-!define SVRServerDLFileZip "SlimeVR-Server-latest.zip"
+!define SVRServerDLURL "assets\\SlimeVR-Server.zip"
+!define SVRServerDLFileZip "SlimeVR-Server.zip"
 
-!define SVRDriverVersion "latest"
+!define SVRDriverVersion "PLACEHOLDER_VERSION"
 !define SVRDriverURLType "local" ; "url" or "local"
 !define SVRDriverDLURL "assets\\slimevr-openvr-driver-win64.zip"
 !define SVRDriverDLFileZip "slimevr-openvr-driver-win64.zip"
 
-!define SVRFeederVersion "latest"
+!define SVRFeederVersion "PLACEHOLDER_VERSION"
 !define SVRFeederURLType "local" ; "url" or "local"
-!define SVRFeederDLURL "assets\\SlimeVR-Feeder-App-latest.zip"
-!define SVRFeederDLFileZip "SlimeVR-Feeder-App-latest.zip"
+!define SVRFeederDLURL "assets\\SlimeVR-Feeder-App.zip"
+!define SVRFeederDLFileZip "SlimeVR-Feeder-App.zip"
 
 Var JREneedInstall
 Var /GLOBAL PUBLIC

@@ -40,18 +40,23 @@ jobs:
           $versionFixed = $JRE_VERSION -replace '\+', '_'
           Invoke-WebRequest -Uri "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-$JRE_VERSION/OpenJDK17U-jre_x64_windows_hotspot_$versionFixed.zip" -OutFile "$assetsDir/jre.zip"
           # Server
-          Invoke-WebRequest -Uri "https://github.com/SlimeVR/SlimeVR-Server/releases/download/$SERVER_VERSION/SlimeVR-win64.zip" -OutFile "$assetsDir/SlimeVR-Server-latest.zip"
+          Invoke-WebRequest -Uri "https://github.com/SlimeVR/SlimeVR-Server/releases/download/$SERVER_VERSION/SlimeVR-win64.zip" -OutFile "$assetsDir/SlimeVR-Server.zip"
           # Driver
           Invoke-WebRequest -Uri "https://github.com/SlimeVR/SlimeVR-OpenVR-Driver/releases/download/$DRIVER_VERSION/slimevr-openvr-driver-win64.zip" -OutFile "$assetsDir/slimevr-openvr-driver-win64.zip"
           # Feeder
-          Invoke-WebRequest -Uri "https://github.com/SlimeVR/SlimeVR-Feeder-App/releases/download/$FEEDER_VERSION/SlimeVR-Feeder-App-win64.zip" -OutFile "$assetsDir/SlimeVR-Feeder-App-latest.zip"
+          Invoke-WebRequest -Uri "https://github.com/SlimeVR/SlimeVR-Feeder-App/releases/download/$FEEDER_VERSION/SlimeVR-Feeder-App-win64.zip" -OutFile "$assetsDir/SlimeVR-Feeder-App.zip"
       - name: Update NSI defines
         shell: powershell
         run: |
           $JRE_VERSION = "${{ env.JRE_VERSION }}"
           $SERVER_VERSION = "${{ env.SERVER_VERSION }}"
+          $DRIVER_VERSION = "${{ env.DRIVER_VERSION }}"
+          $FEEDER_VERSION = "${{ env.FEEDER_VERSION }}"
           $content = Get-Content -Path "${{ env.WINDOWS_WEB_DIR }}/slimevr_web_installer.nsi" -Raw
           $content = $content -replace '!define JREVersion "PLACEHOLDER_VERSION"', "!define JREVersion `"${JRE_VERSION}`""
+          $content = $content -replace '!define SVRServerVersion "PLACEHOLDER_VERSION"', "!define SVRServerVersion `"${SERVER_VERSION}`""
+          $content = $content -replace '!define SVRDriverVersion "PLACEHOLDER_VERSION"', "!define SVRDriverVersion `"${DRIVER_VERSION}`""
+          $content = $content -replace '!define SVRFeederVersion "PLACEHOLDER_VERSION"', "!define SVRFeederVersion `"${FEEDER_VERSION}`""
           $content = $content -replace 'OutFile "OUTFILE_NAME"', "OutFile `"slimevr_${SERVER_VERSION}_offline_installer.exe`""
           Set-Content -Path "${{ env.WINDOWS_WEB_DIR }}/slimevr_web_installer.nsi" -Value $content -NoNewline
 
