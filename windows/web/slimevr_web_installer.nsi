@@ -52,13 +52,23 @@ Unicode True
 
 !define SVRDriverVersion "PLACEHOLDER_VERSION"
 !define SVRDriverURLType "local" ; "url" or "local"
-!define SVRDriverDLURL "assets\\slimevr-openvr-driver-win64.zip"
-!define SVRDriverDLFileZip "slimevr-openvr-driver-win64.zip"
+!define SVRDriverDLURL "assets\\slimevr-openvr-driver-x64-windows-static-md.zip"
+!define SVRDriverDLFileZip "slimevr-openvr-driver-x64-windows-static-md.zip"
 
-!define SVRFeederVersion "PLACEHOLDER_VERSION"
-!define SVRFeederURLType "local" ; "url" or "local"
-!define SVRFeederDLURL "assets\\SlimeVR-Feeder-App.zip"
-!define SVRFeederDLFileZip "SlimeVR-Feeder-App.zip"
+SetCompressor lzma
+
+!macro RemoveFeederApp un
+Function ${un}RemoveFeederApp
+    IfFileExists "$INSTDIR\Feeder-App\SlimeVR-Feeder-App.exe" feeder_found feeder_not_found
+    feeder_found:
+        DetailPrint "Unregistering SlimeVR Feeder App..."
+        nsExec::ExecToLog '"$INSTDIR\Feeder-App\SlimeVR-Feeder-App.exe" --uninstall'
+        RMDir /r "$INSTDIR\Feeder-App"
+    feeder_not_found:
+FunctionEnd
+!macroend
+!insertmacro RemoveFeederApp ""
+!insertmacro RemoveFeederApp "un."
 
 Var JREneedInstall
 Var /GLOBAL PUBLIC
@@ -75,7 +85,6 @@ Name "SlimeVR"
 
 SpaceTexts none # Don't show required disk space since we don't know for sure
 SetOverwrite on
-SetCompressor lzma  # Use LZMA Compression algorithm, compression quality is better.
 
 OutFile "OUTFILE_NAME"
 
@@ -85,7 +94,7 @@ InstallDir "$PROGRAMFILES\SlimeVR Server" ; $InstDir default value. Defaults to 
 ShowInstDetails show
 ShowUninstDetails show
 
-BrandingText "SlimeVR Installer 4.0.0"
+BrandingText "SlimeVR Installer 5.0.0"
 
 # Admin rights are required for:
 # 1. Removing Start Menu shortcut in Windows 7+
@@ -438,6 +447,8 @@ Section "SlimeVR Server" SEC_SERVER
         IfFileExists "$APPDATA\dev.slimevr.SlimeVR\electron" 0 SEC_ELECTON_DIRNOTFOUND
             RMDir /r "$APPDATA\dev.slimevr.SlimeVR\electron"
         SEC_ELECTON_DIRNOTFOUND:
+
+            Call RemoveFeederApp
     ${EndIf}
     
     # Create the uninstaller
@@ -508,20 +519,6 @@ Section "SteamVR Driver" SEC_VRDRIVER
         ${Endif}
         CopyFiles /SILENT "${SLIMETEMP}\slimevr-openvr-driver-win64\slimevr" "$0\drivers\slimevr"
     ${EndIf}
-SectionEnd
-
-Section "SlimeVR Feeder App" SEC_FEEDER_APP
-    SetOutPath $INSTDIR
-
-    !insertmacro dlFile "${SVRFeederURLType}" "SlimeVR Feeder App" "${SVRFeederVersion}" "${SVRFeederDLURL}" "${SVRFeederDLFileZip}"
-    # The zip contains a folder named SlimeVR-Feeder-App-win64
-    !insertmacro unzipFile "SlimeVR Feeder App" "${SVRFeederVersion}" "${SLIMETEMP}\${SVRFeederDLFileZip}" "${SLIMETEMP}"
-
-    DetailPrint "Copying SlimeVR Feeder App..."
-    CopyFiles /SILENT "${SLIMETEMP}\SlimeVR-Feeder-App-win64\*" "$INSTDIR\Feeder-App"
-
-    DetailPrint "Installing SlimeVR Feeder App driver..."
-    nsExec::ExecToLog '"$INSTDIR\Feeder-App\SlimeVR-Feeder-App.exe" --install'
 SectionEnd
 
 Section "Microsoft Visual C++ Redistributable" SEC_MSVCPP
@@ -677,11 +674,9 @@ Function componentsPre
     ${If} $STEAMDIR == ""
         MessageBox MB_OK $(DESC_STEAM_NOTFOUND)
         SectionSetFlags ${SEC_VRDRIVER} ${SF_USELECTED}|${SF_RO}
-        SectionSetFlags ${SEC_FEEDER_APP} ${SF_USELECTED}|${SF_RO}
         SectionSetFlags ${SEC_MSVCPP} ${SF_USELECTED}|${SF_RO}
     ${Else}
         SectionSetFlags ${SEC_VRDRIVER} ${SF_SELECTED}
-        SectionSetFlags ${SEC_FEEDER_APP} ${SF_SELECTED}
         SectionSetFlags ${SEC_MSVCPP} ${SF_SELECTED}|${SF_RO}
     ${EndIf}
 
@@ -713,9 +708,6 @@ FunctionEnd
 Function .onSelChange
     SectionGetFlags ${SEC_VRDRIVER} $0
     IntOp $0 $0 & ${SF_SELECTED}
-    SectionGetFlags ${SEC_FEEDER_APP} $1
-    IntOp $1 $1 & ${SF_SELECTED}
-    IntOp $0 $0 | $1
     ${If} $0 == ${SF_SELECTED}
         SectionSetFlags ${SEC_MSVCPP} ${SF_SELECTED}|${SF_RO}
     ${Else}
@@ -732,6 +724,7 @@ Section "-un.SlimeVR Server" un.SEC_SERVER
     Delete "$DESKTOP\SlimeVR Server.lnk"
     RMDir /r "$LOCALAPPDATA\dev.slimevr.SlimeVR"
     RMDir /r "$APPDATA\dev.slimevr.SlimeVR\electron"
+    Call un.RemoveFeederApp
     # Ignore errors on the files above, they are optional to remove and may not even exist
     ClearErrors
     RMDir /r $INSTDIR
@@ -753,16 +746,6 @@ Section "-un.SteamVR Driver" un.SEC_VRDRIVER
     Delete "$INSTDIR\steamvr.ps1"
 SectionEnd
 
-Section "-un.SlimeVR Feeder App" un.SEC_FEEDER_APP
-    IfFileExists "$INSTDIR\Feeder-App\SlimeVR-Feeder-App.exe" found not_found
-    found:
-        DetailPrint "Unregistering SlimeVR Feeder App driver..."
-        nsExec::ExecToLog '"$INSTDIR\Feeder-App\SlimeVR-Feeder-App.exe" --uninstall'
-        DetailPrint "Removing SlimeVR Feeder App..."
-        RMdir /r "$INSTDIR\Feeder-App"
-    not_found:
-SectionEnd
-
 Section "-un." un.SEC_FIREWALL
     DetailPrint "Removing SlimeVR Server from firewall exceptions...."
     nsExec::Exec '"$INSTDIR\firewall_uninstall.bat"'
@@ -782,8 +765,7 @@ LangString DESC_SEC_SERVER ${LANG_ENGLISH} "Installs latest SlimeVR Server."
 LangString DESC_SEC_JRE ${LANG_ENGLISH} "Downloads and copies Java JRE 17 to installation folder. Required for SlimeVR Server."
 LangString DESC_SEC_VRDRIVER ${LANG_ENGLISH} "Installs latest SteamVR Driver for SlimeVR."
 LangString DESC_SEC_USBDRIVERS ${LANG_ENGLISH} "A list of USB drivers that are used by various boards."
-LangString DESC_SEC_FEEDER_APP ${LANG_ENGLISH} "Installs SlimeVR Feeder App that sends position of SteamVR trackers (Vive trackers, controllers) to SlimeVR Server. Required for elbow tracking."
-LangString DESC_SEC_MSVCPP ${LANG_ENGLISH} "Installs the latest Microsoft Visual C++ Redistributable Version (required by the SteamVR Driver and the SlimeVR Feeder)"
+LangString DESC_SEC_MSVCPP ${LANG_ENGLISH} "Installs the latest Microsoft Visual C++ Redistributable Version (required by the SteamVR Driver)"
 LangString DESC_SEC_CP210X ${LANG_ENGLISH} "Installs CP210X USB driver that comes with the following boards: NodeMCU v2, Wemos D1 Mini."
 LangString DESC_SEC_CH340 ${LANG_ENGLISH} "Installs CH340 USB driver that comes with the following boards: NodeMCU v3, SlimeVR, Wemos D1 Mini."
 LangString DESC_SEC_CH9102x ${LANG_ENGLISH} "Installs CH9102x USB driver that comes with the following boards: NodeMCU v2.1."
@@ -796,7 +778,6 @@ LangString DESC_PROCESS_ERROR ${LANG_ENGLISH} "An error happend while trying for
     !insertmacro MUI_DESCRIPTION_TEXT ${SEC_SERVER} $(DESC_SEC_SERVER)
     !insertmacro MUI_DESCRIPTION_TEXT ${SEC_JRE} $(DESC_SEC_JRE)
     !insertmacro MUI_DESCRIPTION_TEXT ${SEC_VRDRIVER} $(DESC_SEC_VRDRIVER)
-    !insertmacro MUI_DESCRIPTION_TEXT ${SEC_FEEDER_APP} $(DESC_SEC_FEEDER_APP)
     !insertmacro MUI_DESCRIPTION_TEXT ${SEC_MSVCPP} $(DESC_SEC_MSVCPP)
     !insertmacro MUI_DESCRIPTION_TEXT ${SEC_USBDRIVERS} $(DESC_SEC_USBDRIVERS)
     !insertmacro MUI_DESCRIPTION_TEXT ${SEC_CP210X} $(DESC_SEC_CP210X)
