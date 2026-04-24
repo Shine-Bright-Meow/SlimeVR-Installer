@@ -52,8 +52,8 @@ Unicode True
 
 !define SVRDriverVersion "PLACEHOLDER_VERSION"
 !define SVRDriverURLType "local" ; "url" or "local"
-!define SVRDriverDLURL "assets\\slimevr-openvr-driver-x64-windows-static-md.zip"
-!define SVRDriverDLFileZip "slimevr-openvr-driver-x64-windows-static-md.zip"
+!define SVRDriverDLURL "assets\\slimevr-openvr-driver-win64.zip"
+!define SVRDriverDLFileZip "slimevr-openvr-driver-win64.zip"
 
 SetCompressor lzma
 

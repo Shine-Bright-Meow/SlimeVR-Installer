@@ -40,7 +40,7 @@ jobs:
           # Server
           Invoke-WebRequest -Uri "https://github.com/SlimeVR/SlimeVR-Server/releases/download/$SERVER_VERSION/SlimeVR-win64.zip" -OutFile "$assetsDir/SlimeVR-Server.zip"
           # Driver
-          Invoke-WebRequest -Uri "https://github.com/SlimeVR/SlimeVR-OpenVR-Driver/releases/download/$DRIVER_VERSION/slimevr-openvr-driver-x64-windows-static-md.zip" -OutFile "$assetsDir/slimevr-openvr-driver-x64-windows-static-md.zip"
+          Invoke-WebRequest -Uri "https://github.com/SlimeVR/SlimeVR-OpenVR-Driver/releases/download/$DRIVER_VERSION/slimevr-openvr-driver-win64.zip" -OutFile "$assetsDir/slimevr-openvr-driver-win64.zip"
       - name: Update NSI defines
         shell: powershell
         run: |
