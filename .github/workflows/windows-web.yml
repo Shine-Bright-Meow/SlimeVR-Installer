@@ -7,7 +7,7 @@ on: [ push, pull_request, workflow_dispatch ]
 env:
   DRIVER_VERSION: "v5.0.0" # https://github.com/SlimeVR/SlimeVR-OpenVR-Driver/tags
   JRE_VERSION: "17.0.11+9" # https://github.com/adoptium/temurin17-binaries/tags
-  SERVER_VERSION: "v21.0.0-rc.1" # https://github.com/SlimeVR/SlimeVR-Server/tags
+  SERVER_VERSION: "v21.0.0" # https://github.com/SlimeVR/SlimeVR-Server/tags
 
 jobs:
 
